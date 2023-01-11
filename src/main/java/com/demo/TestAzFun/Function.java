@@ -8,6 +8,7 @@ import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.microsoft.azure.functions.annotation.QueueTrigger;
 
 import java.util.Optional;
 
@@ -39,5 +40,18 @@ public class Function {
         } else {
             return request.createResponseBuilder(HttpStatus.OK).body("ResponseFromTestFunc123444, " + name).build();
         }
+    }
+    
+    
+    
+    @FunctionName("que")
+    public void run(
+    		@QueueTrigger(name = "message", queueName = "java-func-trigg-queue", 
+        connection = "https://javafunstorageacc.queue.core.windows.net/java-func-trigg-queue") String message,
+        HttpRequestMessage<Optional<String>> request,
+        final ExecutionContext context
+    ) {
+        context.getLogger().info("Queue message: " + message);
+       
     }
 }
